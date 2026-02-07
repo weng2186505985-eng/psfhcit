@@ -1,0 +1,2990 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#fef5f5">
+    <title>PsycheFit - 依恋风格测试</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+            background: linear-gradient(135deg, #fef5f5 0%, #f0e8f5 50%, #e8f0f5 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* 装饰性背景圆圈 - 增强动画 */
+        .bg-circle {
+            position: fixed;
+            border-radius: 50%;
+            opacity: 0.15;
+            pointer-events: none;
+            z-index: 0;
+            animation: float 20s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            25% { transform: translate(10px, -10px) scale(1.05); }
+            50% { transform: translate(-10px, 10px) scale(0.95); }
+            75% { transform: translate(10px, 10px) scale(1.02); }
+        }
+
+        .bg-circle-1 {
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, #ffc9d4, transparent);
+            top: 10%;
+            left: -100px;
+            animation-delay: 0s;
+        }
+
+        .bg-circle-2 {
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, #c9d4ff, transparent);
+            bottom: 10%;
+            right: -150px;
+            animation-delay: -10s;
+        }
+
+        .bg-circle-3 {
+            width: 250px;
+            height: 250px;
+            background: radial-gradient(circle, #d4ffc9, transparent);
+            top: 50%;
+            right: -80px;
+            animation-delay: -5s;
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 100%;
+            min-height: 100vh;
+            padding: 0;
+        }
+
+        /* Header - 增强 */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 24px;
+            background: rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            transition: all 0.3s ease;
+        }
+
+        .header.scrolled {
+            background: rgba(255, 255, 255, 0.8);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 22px;
+            font-weight: 600;
+            color: #2d3748;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: white;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease;
+        }
+
+        .logo-icon:active {
+            transform: scale(0.95);
+        }
+
+        .settings-icon {
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #718096;
+            font-size: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .settings-icon:active {
+            transform: scale(0.9);
+            background: rgba(255, 255, 255, 1);
+        }
+
+        /* Welcome Screen - 增强动画 */
+        .welcome-screen {
+            text-align: center;
+            padding: 60px 24px 40px;
+            animation: fadeInUp 0.6s ease;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: white;
+            padding: 10px 20px;
+            border-radius: 20px;
+            color: #718096;
+            font-size: 14px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            animation: fadeInUp 0.6s ease 0.1s both;
+        }
+
+        .badge-pulse {
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .main-title {
+            font-size: 36px;
+            font-weight: 700;
+            color: #2d3748;
+            margin-bottom: 10px;
+            line-height: 1.2;
+            animation: fadeInUp 0.6s ease 0.2s both;
+        }
+
+        .main-title .highlight {
+            background: linear-gradient(135deg, #a8b5c8, #c8b5d8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            font-size: 16px;
+            color: #718096;
+            line-height: 1.6;
+            margin-bottom: 40px;
+            padding: 0 20px;
+            animation: fadeInUp 0.6s ease 0.3s both;
+        }
+
+        .start-button {
+            background: linear-gradient(135deg, #8fa89f, #a8b89f);
+            color: white;
+            border: none;
+            padding: 18px 40px;
+            border-radius: 30px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(143, 168, 159, 0.3);
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s ease;
+            animation: fadeInUp 0.6s ease 0.4s both;
+        }
+
+        .start-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 35px rgba(143, 168, 159, 0.4);
+        }
+
+        .start-button:active {
+            transform: translateY(0) scale(0.98);
+        }
+
+        .time-info {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            color: #a0aec0;
+            font-size: 14px;
+            margin-top: 20px;
+            animation: fadeInUp 0.6s ease 0.5s both;
+        }
+
+        .learn-more {
+            color: #a0aec0;
+            font-size: 14px;
+            margin-top: 30px;
+            cursor: pointer;
+            transition: color 0.3s ease;
+            animation: fadeInUp 0.6s ease 0.6s both;
+        }
+
+        .learn-more:hover {
+            color: #718096;
+        }
+
+        /* Reflection Screen - 新增 */
+        .reflection-screen {
+            display: none;
+            text-align: center;
+            padding: 80px 24px 40px;
+            animation: fadeIn 0.8s ease;
+        }
+
+        .reflection-icon {
+            font-size: 120px;
+            margin-bottom: 40px;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        .reflection-title {
+            font-size: 28px;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 20px;
+        }
+
+        .reflection-subtitle {
+            font-size: 16px;
+            color: #718096;
+            line-height: 1.6;
+            margin-bottom: 40px;
+        }
+
+        .growth-section {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+
+        .growth-label {
+            color: #d4a5a5;
+            font-size: 11px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 15px;
+        }
+
+        .growth-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(143, 168, 159, 0.2);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .growth-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #8fa89f, #a8b89f);
+            border-radius: 10px;
+            width: 0;
+            animation: growthFill 2s ease-out forwards;
+        }
+
+        @keyframes growthFill {
+            to { width: 35%; }
+        }
+
+        /* Test Screen - 优化 */
+        .test-screen {
+            display: none;
+            padding: 20px 24px 40px;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .test-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .scenario-label {
+            color: #d4a5a5;
+            font-size: 12px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+
+        .scenario-number {
+            color: #a0aec0;
+            font-size: 16px;
+        }
+
+        .progress-bar {
+            width: 120px;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: 10px;
+            margin: 20px auto;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #f4c4c4, #c4d4f4);
+            border-radius: 10px;
+            transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .question-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+            border-radius: 24px;
+            padding: 40px 24px;
+            text-align: center;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+            animation: slideInLeft 0.4s ease;
+        }
+
+        .icon-circle {
+            width: 80px;
+            height: 80px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 30px;
+            font-size: 36px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+            animation: iconBounce 0.6s ease;
+        }
+
+        @keyframes iconBounce {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .question-title {
+            font-size: 22px;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 20px;
+            line-height: 1.4;
+        }
+
+        .question-desc {
+            font-size: 15px;
+            color: #718096;
+            line-height: 1.6;
+        }
+
+        .select-label {
+            color: #d4a5a5;
+            font-size: 12px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .option {
+            background: rgba(255, 255, 255, 0.8);
+            border: 2px solid transparent;
+            border-radius: 20px;
+            padding: 20px;
+            text-align: left;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            animation: slideInRight 0.4s ease;
+            animation-fill-mode: both;
+        }
+
+        .option:nth-child(1) { animation-delay: 0.1s; }
+        .option:nth-child(2) { animation-delay: 0.2s; }
+        .option:nth-child(3) { animation-delay: 0.3s; }
+
+        .option:hover {
+            transform: translateX(5px);
+        }
+
+        .option:active {
+            transform: scale(0.98);
+        }
+
+        .option.selected {
+            border-color: #a8b89f;
+            background: linear-gradient(135deg, rgba(168, 184, 159, 0.15), rgba(168, 184, 159, 0.08));
+            box-shadow: 0 5px 20px rgba(168, 184, 159, 0.2);
+            transform: translateX(8px);
+        }
+
+        .option-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .option-radio {
+            width: 20px;
+            height: 20px;
+            border: 2px solid #cbd5e0;
+            border-radius: 50%;
+            display: inline-block;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .option.selected .option-radio {
+            border-color: #a8b89f;
+            background: #a8b89f;
+        }
+
+        .option.selected .option-radio::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 8px;
+            height: 8px;
+            background: white;
+            border-radius: 50%;
+        }
+
+        .option-desc {
+            font-size: 14px;
+            color: #718096;
+            line-height: 1.5;
+            padding-left: 30px;
+        }
+
+        /* Navigation buttons - 优化 */
+        .nav-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 30px;
+            position: sticky;
+            bottom: 20px;
+            z-index: 10;
+        }
+
+        .nav-button {
+            flex: 1;
+            padding: 16px;
+            border-radius: 30px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            transition: all 0.3s ease;
+        }
+
+        .btn-back {
+            background: rgba(255, 255, 255, 0.9);
+            color: #718096;
+            border: 2px solid #e2e8f0;
+        }
+
+        .btn-back:active {
+            transform: scale(0.95);
+        }
+
+        .btn-next {
+            background: linear-gradient(135deg, #8fa89f, #a8b89f);
+            color: white;
+            box-shadow: 0 4px 15px rgba(143, 168, 159, 0.3);
+        }
+
+        .btn-next:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(143, 168, 159, 0.4);
+        }
+
+        .btn-next:active:not(:disabled) {
+            transform: translateY(0) scale(0.98);
+        }
+
+        .btn-next:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Result Screen - 大幅优化 */
+        .result-screen {
+            display: none;
+            padding: 20px 24px 40px;
+            animation: fadeIn 0.6s ease;
+        }
+
+        .result-header {
+            text-align: center;
+            margin-bottom: 30px;
+            animation: fadeInUp 0.6s ease;
+        }
+
+        .result-title {
+            font-size: 14px;
+            color: #a0aec0;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+        }
+
+        .attachment-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            border-radius: 24px;
+            padding: 30px 24px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+            animation: slideInLeft 0.6s ease 0.2s both;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .attachment-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #8fa89f, #a8b89f);
+        }
+
+        .attachment-badge {
+            display: inline-block;
+            padding: 6px 16px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+        }
+
+        .badge-healthy {
+            background: rgba(143, 168, 159, 0.2);
+            color: #5a7a6a;
+        }
+
+        .badge-anxious {
+            background: rgba(255, 150, 120, 0.2);
+            color: #cc6644;
+        }
+
+        .badge-avoidant {
+            background: rgba(120, 150, 200, 0.2);
+            color: #5577aa;
+        }
+
+        .badge-fearful {
+            background: rgba(200, 150, 200, 0.2);
+            color: #aa7799;
+        }
+
+        .attachment-name {
+            font-size: 28px;
+            font-weight: 700;
+            color: #2d3748;
+            margin-bottom: 15px;
+        }
+
+        .attachment-desc {
+            font-size: 15px;
+            color: #4a5568;
+            line-height: 1.8;
+            margin-bottom: 25px;
+        }
+
+        /* 详细特征 - 新增 */
+        .characteristics {
+            background: rgba(248, 250, 252, 0.8);
+            border-radius: 16px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .characteristics-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #4a5568;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .characteristic-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(226, 232, 240, 0.5);
+        }
+
+        .characteristic-item:last-child {
+            border-bottom: none;
+        }
+
+        .characteristic-icon {
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+
+        .characteristic-text {
+            font-size: 14px;
+            color: #4a5568;
+            line-height: 1.6;
+        }
+
+        /* 成长建议 - 新增 */
+        .growth-tips {
+            background: linear-gradient(135deg, rgba(143, 168, 159, 0.1), rgba(168, 184, 159, 0.1));
+            border-radius: 16px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .growth-tips-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #5a7a6a;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .growth-tip-item {
+            background: white;
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 12px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .growth-tip-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .growth-tip-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 8px;
+        }
+
+        .growth-tip-desc {
+            font-size: 13px;
+            color: #718096;
+            line-height: 1.6;
+        }
+
+        /* 分数分布 - 新增 */
+        .score-distribution {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 24px;
+            margin-bottom: 20px;
+            animation: slideInRight 0.6s ease 0.4s both;
+        }
+
+        .score-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .score-item {
+            margin-bottom: 16px;
+        }
+
+        .score-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .score-name {
+            color: #4a5568;
+            font-weight: 500;
+        }
+
+        .score-value {
+            color: #718096;
+        }
+
+        .score-bar-bg {
+            height: 8px;
+            background: rgba(226, 232, 240, 0.5);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .score-bar-fill {
+            height: 100%;
+            border-radius: 10px;
+            transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
+            width: 0;
+        }
+
+        .score-bar-fill.secure { background: linear-gradient(90deg, #8fa89f, #a8b89f); }
+        .score-bar-fill.anxious { background: linear-gradient(90deg, #ff9678, #ffb699); }
+        .score-bar-fill.avoidant { background: linear-gradient(90deg, #7896c8, #98b6e8); }
+        .score-bar-fill.fearful { background: linear-gradient(90deg, #c896c8, #d8b6d8); }
+
+        .read-more {
+            color: #8fa89f;
+            font-size: 14px;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            transition: gap 0.3s ease;
+        }
+
+        .read-more:hover {
+            gap: 10px;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .share-button, .restart-button {
+            flex: 1;
+            padding: 16px 24px;
+            border-radius: 30px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            transition: all 0.3s ease;
+        }
+
+        .share-button {
+            background: linear-gradient(135deg, #8fa89f, #a8b89f);
+            color: white;
+            box-shadow: 0 4px 15px rgba(143, 168, 159, 0.3);
+        }
+
+        .restart-button {
+            background: white;
+            color: #718096;
+            border: 2px solid #e2e8f0;
+        }
+
+        .share-button:active, .restart-button:active {
+            transform: scale(0.98);
+        }
+
+        .wisdom-card {
+            background: linear-gradient(135deg, rgba(255, 240, 245, 0.8), rgba(245, 240, 255, 0.8));
+            backdrop-filter: blur(10px);
+            border-radius: 24px;
+            padding: 30px 24px;
+            text-align: center;
+            margin-top: 30px;
+            animation: fadeInUp 0.6s ease 0.6s both;
+        }
+
+        .wisdom-icon {
+            font-size: 28px;
+            margin-bottom: 15px;
+        }
+
+        .wisdom-label {
+            color: #a0aec0;
+            font-size: 11px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 15px;
+        }
+
+        .wisdom-quote {
+            font-size: 16px;
+            font-style: italic;
+            color: #4a5568;
+            line-height: 1.8;
+            margin-bottom: 15px;
+        }
+
+        .wisdom-source {
+            color: #a0aec0;
+            font-size: 12px;
+        }
+
+        /* Attachment Overview - 优化 */
+        .attachment-overview {
+            display: none;
+            padding: 20px 24px 40px;
+            animation: fadeIn 0.6s ease;
+        }
+
+        .overview-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: #2d3748;
+            margin-bottom: 10px;
+            animation: fadeInUp 0.6s ease;
+        }
+
+        .overview-desc {
+            font-size: 14px;
+            color: #718096;
+            line-height: 1.6;
+            margin-bottom: 30px;
+            animation: fadeInUp 0.6s ease 0.1s both;
+        }
+
+        .style-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 24px;
+            margin-bottom: 16px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 2px solid transparent;
+            animation: slideInLeft 0.4s ease;
+            animation-fill-mode: both;
+        }
+
+        .style-card:nth-child(1) { animation-delay: 0.2s; }
+        .style-card:nth-child(2) { animation-delay: 0.3s; }
+        .style-card:nth-child(3) { animation-delay: 0.4s; }
+        .style-card:nth-child(4) { animation-delay: 0.5s; }
+
+        .style-card:hover {
+            transform: translateX(5px);
+        }
+
+        .style-card:active {
+            transform: scale(0.98);
+        }
+
+        .style-card.green {
+            background: linear-gradient(135deg, rgba(230, 245, 235, 0.95), rgba(220, 240, 230, 0.95));
+        }
+
+        .style-card.orange {
+            background: linear-gradient(135deg, rgba(255, 240, 235, 0.95), rgba(255, 235, 230, 0.95));
+        }
+
+        .style-card.blue {
+            background: linear-gradient(135deg, rgba(235, 245, 255, 0.95), rgba(230, 240, 255, 0.95));
+        }
+
+        .style-card.purple {
+            background: linear-gradient(135deg, rgba(245, 235, 255, 0.95), rgba(240, 230, 255, 0.95));
+        }
+
+        .style-icon {
+            font-size: 36px;
+            margin-bottom: 15px;
+        }
+
+        .style-name {
+            font-size: 20px;
+            font-weight: 700;
+            color: #2d3748;
+            margin-bottom: 10px;
+        }
+
+        .style-desc {
+            font-size: 14px;
+            color: #4a5568;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        /* Loading Animation - 新增 */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .loading-content {
+            text-align: center;
+        }
+
+        .spinner {
+            width: 60px;
+            height: 60px;
+            border: 4px solid rgba(143, 168, 159, 0.2);
+            border-top-color: #8fa89f;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            font-size: 16px;
+            color: #4a5568;
+            margin-bottom: 10px;
+        }
+
+        .loading-subtext {
+            font-size: 14px;
+            color: #a0aec0;
+        }
+
+        /* Modal - 新增 */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1001;
+            padding: 20px;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 24px;
+            padding: 30px 24px;
+            max-width: 400px;
+            width: 100%;
+            max-height: 80vh;
+            overflow-y: auto;
+            animation: slideInUp 0.4s ease;
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .modal-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: #2d3748;
+            margin-bottom: 15px;
+        }
+
+        .modal-desc {
+            font-size: 15px;
+            color: #4a5568;
+            line-height: 1.7;
+            margin-bottom: 25px;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 12px;
+        }
+
+        .modal-button {
+            flex: 1;
+            padding: 14px;
+            border-radius: 20px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            transition: all 0.3s ease;
+        }
+
+        .modal-button-primary {
+            background: linear-gradient(135deg, #8fa89f, #a8b89f);
+            color: white;
+        }
+
+        .modal-button-secondary {
+            background: rgba(226, 232, 240, 0.5);
+            color: #4a5568;
+        }
+
+        .modal-button:active {
+            transform: scale(0.95);
+        }
+
+        /* Responsive */
+        @media (max-width: 375px) {
+            .main-title {
+                font-size: 32px;
+            }
+            .question-title {
+                font-size: 20px;
+            }
+            .attachment-name {
+                font-size: 24px;
+            }
+        }
+
+        @media (min-width: 768px) {
+            .container {
+                max-width: 600px;
+                margin: 0 auto;
+            }
+        }
+
+        /* Toast Notification - 新增 */
+        .toast {
+            position: fixed;
+            bottom: -100px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(45, 55, 72, 0.95);
+            backdrop-filter: blur(10px);
+            color: white;
+            padding: 16px 24px;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            z-index: 1002;
+            transition: bottom 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 15px;
+            max-width: 90%;
+        }
+
+        .toast.show {
+            bottom: 30px;
+        }
+
+        .toast-icon {
+            font-size: 20px;
+        }
+
+        /* Progress Indicator - 新增 */
+        .question-progress {
+            display: flex;
+            justify-content: center;
+            gap: 6px;
+            margin: 25px 0;
+            flex-wrap: wrap;
+            padding: 0 20px;
+        }
+
+        .progress-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: rgba(160, 174, 192, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .progress-dot.completed {
+            background: linear-gradient(135deg, #8fa89f, #a8b89f);
+            transform: scale(1.2);
+        }
+
+        .progress-dot.current {
+            background: #c8b5d8;
+            transform: scale(1.4);
+            box-shadow: 0 0 10px rgba(200, 181, 216, 0.5);
+        }
+
+        /* Swipe Animation - 新增 */
+        @keyframes swipeOut {
+            to {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+        }
+
+        @keyframes swipeIn {
+            from {
+                opacity: 0;
+                transform: translateX(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .question-card.swipe-out {
+            animation: swipeOut 0.3s ease forwards;
+        }
+
+        .question-card.swipe-in {
+            animation: swipeIn 0.3s ease forwards;
+        }
+
+        /* Confetti Effect - 新增 */
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background: #f0f;
+            position: absolute;
+            animation: confetti-fall 3s linear forwards;
+            z-index: 999;
+        }
+
+        @keyframes confetti-fall {
+            to {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Percentage Circle - 新增 */
+        .percentage-circle {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: conic-gradient(
+                #8fa89f 0deg,
+                #8fa89f var(--percentage),
+                rgba(226, 232, 240, 0.3) var(--percentage),
+                rgba(226, 232, 240, 0.3) 360deg
+            );
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            position: relative;
+            animation: rotate 2s ease-in-out;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .percentage-circle::before {
+            content: '';
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: white;
+        }
+
+        .percentage-text {
+            position: relative;
+            z-index: 1;
+            font-size: 28px;
+            font-weight: 700;
+            color: #2d3748;
+        }
+
+        /* Comparison Chart - 新增 */
+        .comparison-section {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 24px;
+            margin: 20px 0;
+        }
+
+        .comparison-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .comparison-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(226, 232, 240, 0.5);
+        }
+
+        .comparison-item:last-child {
+            border-bottom: none;
+        }
+
+        .comparison-label {
+            font-size: 14px;
+            color: #4a5568;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .comparison-bar-container {
+            flex: 1;
+            margin: 0 15px;
+            height: 8px;
+            background: rgba(226, 232, 240, 0.5);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .comparison-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #8fa89f, #a8b89f);
+            border-radius: 10px;
+            transition: width 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+            width: 0;
+        }
+
+        .comparison-value {
+            font-size: 14px;
+            font-weight: 600;
+            color: #718096;
+            min-width: 45px;
+            text-align: right;
+        }
+
+        /* Insight Cards - 新增 */
+        .insights-section {
+            margin: 20px 0;
+        }
+
+        .insight-card {
+            background: linear-gradient(135deg, rgba(143, 168, 159, 0.08), rgba(168, 184, 159, 0.08));
+            border-left: 4px solid #8fa89f;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 12px;
+            animation: slideInLeft 0.4s ease;
+        }
+
+        .insight-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .insight-icon {
+            font-size: 24px;
+        }
+
+        .insight-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: #2d3748;
+        }
+
+        .insight-text {
+            font-size: 14px;
+            color: #4a5568;
+            line-height: 1.6;
+            padding-left: 34px;
+        }
+
+        /* Resources Section - 新增 */
+        .resources-section {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 24px;
+            margin: 20px 0;
+        }
+
+        .resources-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .resource-item {
+            background: white;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .resource-item:hover {
+            border-color: #a8b89f;
+            transform: translateX(5px);
+        }
+
+        .resource-item:active {
+            transform: scale(0.98);
+        }
+
+        .resource-name {
+            font-size: 15px;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 5px;
+        }
+
+        .resource-desc {
+            font-size: 13px;
+            color: #718096;
+            line-height: 1.5;
+        }
+
+        /* Quote Box - 新增 */
+        .quote-box {
+            background: linear-gradient(135deg, rgba(168, 181, 216, 0.1), rgba(200, 181, 216, 0.1));
+            border-left: 4px solid #a8b5d8;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+            font-style: italic;
+        }
+
+        .quote-text {
+            font-size: 15px;
+            color: #4a5568;
+            line-height: 1.7;
+            margin-bottom: 10px;
+        }
+
+        .quote-author {
+            font-size: 13px;
+            color: #718096;
+            font-style: normal;
+            font-weight: 600;
+        }
+
+        /* Journey Timeline - 新增 */
+        .timeline {
+            position: relative;
+            padding: 20px 0;
+            margin: 20px 0;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 20px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(to bottom, #8fa89f, #a8b89f);
+        }
+
+        .timeline-item {
+            position: relative;
+            padding-left: 50px;
+            margin-bottom: 30px;
+        }
+
+        .timeline-dot {
+            position: absolute;
+            left: 13px;
+            top: 5px;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: white;
+            border: 3px solid #8fa89f;
+            box-shadow: 0 0 0 4px rgba(143, 168, 159, 0.2);
+        }
+
+        .timeline-content {
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 12px;
+            padding: 16px;
+        }
+
+        .timeline-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 8px;
+        }
+
+        .timeline-desc {
+            font-size: 13px;
+            color: #718096;
+            line-height: 1.6;
+        }
+
+        /* Emoji Feedback - 新增 */
+        .emoji-feedback {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .emoji-btn {
+            font-size: 36px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            filter: grayscale(1);
+            opacity: 0.5;
+        }
+
+        .emoji-btn:hover {
+            filter: grayscale(0);
+            opacity: 1;
+            transform: scale(1.2);
+        }
+
+        .emoji-btn.selected {
+            filter: grayscale(0);
+            opacity: 1;
+            transform: scale(1.3);
+            animation: bounce 0.5s ease;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: scale(1.3); }
+            50% { transform: scale(1.5); }
+        }
+
+        /* Stats Cards - 新增 */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin: 20px 0;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .stat-icon {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: #2d3748;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: #718096;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Accessibility */
+        .visually-hidden {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border-width: 0;
+        }
+
+        /* Dark Mode Support - 新增 */
+        @media (prefers-color-scheme: dark) {
+            body {
+                background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            }
+            
+            .header {
+                background: rgba(30, 30, 50, 0.8);
+            }
+            
+            .logo, .main-title, .attachment-name, .question-title {
+                color: #e2e8f0;
+            }
+            
+            .subtitle, .question-desc, .attachment-desc {
+                color: #a0aec0;
+            }
+            
+            .question-card, .attachment-card, .style-card {
+                background: rgba(30, 30, 50, 0.8);
+            }
+            
+            .option {
+                background: rgba(40, 40, 60, 0.8);
+            }
+        }
+
+        /* Print Styles */
+        @media print {
+            .header, .nav-buttons, .action-buttons {
+                display: none;
+            }
+            body {
+                background: white;
+            }
+            .bg-circle {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-circle bg-circle-1"></div>
+    <div class="bg-circle bg-circle-2"></div>
+    <div class="bg-circle bg-circle-3"></div>
+
+    <div class="container">
+        <!-- Header -->
+        <div class="header" id="header">
+            <div class="logo">
+                <div class="logo-icon">🌱</div>
+                <span>PsycheFit</span>
+            </div>
+            <div class="settings-icon" onclick="showSettings()">⚙️</div>
+        </div>
+
+        <!-- Welcome Screen -->
+        <div class="welcome-screen" id="welcomeScreen">
+            <div class="badge badge-pulse">
+                <span>💚</span>
+                <span>10万+ 正在寻找内心平静</span>
+            </div>
+            <h1 class="main-title">
+                发现你的<br>
+                <span class="highlight">内在连接</span>
+            </h1>
+            <p class="subtitle">
+                温和地了解你的依恋风格。治愈关系的道路从内心开始。
+            </p>
+            <button class="start-button" onclick="startJourney()">
+                开始旅程
+                <span>→</span>
+            </button>
+            <div class="time-info">
+                <span>🕐</span>
+                <span>平静的5分钟</span>
+            </div>
+            <div class="learn-more" onclick="showAttachmentOverview()">
+                探索依恋理论
+            </div>
+        </div>
+
+        <!-- Reflection Screen -->
+        <div class="reflection-screen" id="reflectionScreen">
+            <div class="reflection-icon">🌸</div>
+            <h2 class="reflection-title">治愈需要时间...</h2>
+            <p class="reflection-subtitle">滋养你的内心花园。</p>
+            
+            <div class="growth-section">
+                <div class="growth-label">成长</div>
+                <div class="growth-bar">
+                    <div class="growth-fill"></div>
+                </div>
+            </div>
+
+            <div class="wisdom-card">
+                <div class="wisdom-icon">🧘</div>
+                <div class="wisdom-label">每日智慧</div>
+                <p class="wisdom-quote">
+                    "就像莲花一样，我们也有能力从淤泥中升起，从黑暗中绽放，向世界散发光芒。"
+                </p>
+                <div class="wisdom-source">— 正念提示</div>
+            </div>
+        </div>
+
+        <!-- Attachment Overview Screen -->
+        <div class="attachment-overview" id="attachmentOverview">
+            <h2 class="overview-title">依恋风格<br>研究与洞察</h2>
+            <p class="overview-desc">
+                探索心理学研究识别的四种主要依恋风格。理解这些模式是建立更健康关系的第一步。
+            </p>
+
+            <div class="style-card green" onclick="showStyleDetail('secure')">
+                <div class="style-icon">🌱</div>
+                <div class="attachment-badge badge-healthy">健康</div>
+                <div class="style-name">安全型依恋</div>
+                <div class="style-desc">
+                    以对亲密关系和独立性的舒适感为特征。安全型个体信任伴侣并有效处理冲突，促进稳定和温暖。
+                </div>
+                <div class="read-more">阅读完整档案 →</div>
+            </div>
+
+            <div class="style-card orange" onclick="showStyleDetail('anxious')">
+                <div class="style-icon">🧡</div>
+                <div class="attachment-badge badge-anxious">寻求安慰</div>
+                <div class="style-name">焦虑-矛盾型</div>
+                <div class="style-desc">
+                    通常以对被抛弃的深层恐惧为特征。个体可能寻求持续的确认，在不与伴侣密切接触时感到不安。
+                </div>
+                <div class="read-more">阅读完整档案 →</div>
+            </div>
+
+            <div class="style-card blue" onclick="showStyleDetail('avoidant')">
+                <div class="style-icon">🛡️</div>
+                <div class="attachment-badge badge-avoidant">独立</div>
+                <div class="style-name">回避-疏离型</div>
+                <div class="style-desc">
+                    以强烈的自立愿望为标志。情感亲密可能让人感到窒息，导致这些个体在关系过于亲密时退缩。
+                </div>
+                <div class="read-more">阅读完整档案 →</div>
+            </div>
+
+            <div class="style-card purple" onclick="showStyleDetail('fearful')">
+                <div class="style-icon">〰️</div>
+                <div class="attachment-badge badge-fearful">复杂</div>
+                <div class="style-name">恐惧-回避型</div>
+                <div class="style-desc">
+                    也称为混乱型依恋。个体渴望亲密但害怕被拒绝，经常在吸引伴侣和推开伴侣之间摇摆。
+                </div>
+                <div class="read-more">阅读完整档案 →</div>
+            </div>
+
+            <button class="start-button" style="width: 100%; margin-top: 20px;" onclick="backToWelcome()">
+                开始评估 →
+            </button>
+        </div>
+
+        <!-- Test Screen -->
+        <div class="test-screen" id="testScreen">
+            <div class="test-header">
+                <div class="scenario-label">情景</div>
+                <div class="scenario-number">第<span id="currentQ">1</span>题，共<span id="totalQ">20</span>题</div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+                <div class="question-progress" id="questionProgress"></div>
+            </div>
+
+            <div class="question-card">
+                <div class="icon-circle" id="questionIcon">🌱</div>
+                <h2 class="question-title" id="questionTitle"></h2>
+                <p class="question-desc" id="questionDesc"></p>
+            </div>
+
+            <div class="select-label">选择一个选项</div>
+            <div class="options" id="optionsContainer"></div>
+
+            <div class="nav-buttons">
+                <button class="nav-button btn-back" onclick="previousQuestion()">← 返回</button>
+                <button class="nav-button btn-next" id="nextBtn" onclick="nextQuestion()" disabled>下一步 →</button>
+            </div>
+        </div>
+
+        <!-- Result Screen -->
+        <div class="result-screen" id="resultScreen">
+            <div class="result-header">
+                <div class="result-title">你的依恋风格</div>
+            </div>
+
+            <div id="resultContent"></div>
+
+            <div class="action-buttons">
+                <button class="share-button" onclick="shareResult()">📊 分享</button>
+                <button class="restart-button" onclick="restartTest()">🔄 重测</button>
+            </div>
+
+            <div class="wisdom-card">
+                <div class="wisdom-icon">🌸</div>
+                <div class="wisdom-label">每日智慧</div>
+                <p class="wisdom-quote">
+                    "就像莲花一样，我们也有能力从淤泥中升起，从黑暗中绽放，向世界散发光芒。"
+                </p>
+                <div class="wisdom-source">— 正念提示</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-content">
+            <div class="spinner"></div>
+            <div class="loading-text">正在分析你的回答...</div>
+            <div class="loading-subtext">发现你的依恋风格</div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal" id="modal">
+        <div class="modal-content">
+            <h3 class="modal-title" id="modalTitle"></h3>
+            <p class="modal-desc" id="modalDesc"></p>
+            <div class="modal-buttons">
+                <button class="modal-button modal-button-secondary" onclick="closeModal()">取消</button>
+                <button class="modal-button modal-button-primary" id="modalConfirm">确认</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast">
+        <span class="toast-icon" id="toastIcon">✓</span>
+        <span id="toastMessage">进度已保存</span>
+    </div>
+
+    <script>
+        // Test questions data - 使用多维度评分系统
+        // 每个选项对四种依恋类型都有影响分数（0-3分）
+        const questions = [
+            {
+                icon: '💬',
+                title: "你的伴侣几个小时没有回复。",
+                desc: "你发送了一条重要信息，但还没有收到回复。",
+                options: [
+                    { 
+                        title: "担心并分析", 
+                        desc: "我一直在查看手机，想知道是不是我说错了什么。",
+                        scores: { secure: 0, anxious: 3, avoidant: 0, fearful: 2 }
+                    },
+                    { 
+                        title: "耐心并信任", 
+                        desc: "他们可能很忙。等他们有空时我会收到消息的。",
+                        scores: { secure: 3, anxious: 0, avoidant: 1, fearful: 0 }
+                    },
+                    { 
+                        title: "不以为意", 
+                        desc: "我不太在意。每个人都有自己的生活。",
+                        scores: { secure: 1, anxious: 0, avoidant: 3, fearful: 1 }
+                    },
+                    { 
+                        title: "复杂感受", 
+                        desc: "一方面我想再次联系，另一方面我又想退缩。",
+                        scores: { secure: 0, anxious: 2, avoidant: 1, fearful: 3 }
+                    }
+                ]
+            },
+            {
+                icon: '❤️',
+                title: "你的伴侣第一次说'我爱你'。",
+                desc: "在这个时刻你有什么感受和回应？",
+                options: [
+                    { 
+                        title: "温暖并回应", 
+                        desc: "我深受感动，如果我也有同样感受，自然会回应。",
+                        scores: { secure: 3, anxious: 1, avoidant: 0, fearful: 0 }
+                    },
+                    { 
+                        title: "欣喜若狂", 
+                        desc: "终于等到了！我一直在等这句话。我感到如释重负和快乐。",
+                        scores: { secure: 1, anxious: 3, avoidant: 0, fearful: 1 }
+                    },
+                    { 
+                        title: "感到不适", 
+                        desc: "我感到尴尬，不知道如何回应。感觉太早了。",
+                        scores: { secure: 0, anxious: 0, avoidant: 3, fearful: 2 }
+                    },
+                    { 
+                        title: "内心矛盾", 
+                        desc: "我想回应但又感到害怕。如果这改变了什么怎么办？",
+                        scores: { secure: 0, anxious: 2, avoidant: 1, fearful: 3 }
+                    }
+                ]
+            },
+            {
+                icon: '😢',
+                title: "你正在经历情感上的困难时期。",
+                desc: "你如何处理与伴侣分享你的困扰？",
+                options: [
+                    { 
+                        title: "开放并分享", 
+                        desc: "我主动联系并分享我的感受。他们的支持帮助了我。",
+                        scores: { secure: 3, anxious: 2, avoidant: 0, fearful: 0 }
+                    },
+                    { 
+                        title: "寻求持续支持", 
+                        desc: "我需要他们在我身边，频繁寻求他们关心我的证明。",
+                        scores: { secure: 1, anxious: 3, avoidant: 0, fearful: 1 }
+                    },
+                    { 
+                        title: "自力更生", 
+                        desc: "我更愿意自己处理。我不喜欢给别人添麻烦。",
+                        scores: { secure: 1, anxious: 0, avoidant: 3, fearful: 1 }
+                    },
+                    { 
+                        title: "推拉行为", 
+                        desc: "我想要支持，但当他们靠近时，我感到窒息并退缩。",
+                        scores: { secure: 0, anxious: 1, avoidant: 2, fearful: 3 }
+                    }
+                ]
+            },
+            {
+                icon: '🌙',
+                title: "你的伴侣需要几天的空间。",
+                desc: "他们告诉你需要一些独处时间来充电。",
+                options: [
+                    { 
+                        title: "理解", 
+                        desc: "我尊重他们需要空间，并利用这段时间做自己的事。",
+                        scores: { secure: 3, anxious: 0, avoidant: 2, fearful: 0 }
+                    },
+                    { 
+                        title: "焦虑并受伤", 
+                        desc: "我感到被拒绝，担心这意味着他们对我失去兴趣。",
+                        scores: { secure: 0, anxious: 3, avoidant: 0, fearful: 2 }
+                    },
+                    { 
+                        title: "感到宽慰", 
+                        desc: "实际上，我欢迎这样做。我最近感觉有点拥挤。",
+                        scores: { secure: 1, anxious: 0, avoidant: 3, fearful: 0 }
+                    },
+                    { 
+                        title: "困惑", 
+                        desc: "我说没关系，但内心担心，然后又为他们离开感到宽慰。",
+                        scores: { secure: 0, anxious: 1, avoidant: 1, fearful: 3 }
+                    }
+                ]
+            },
+            {
+                icon: '🗣️',
+                title: "在分歧中，你通常...",
+                desc: "想想你自然地如何回应冲突。",
+                options: [
+                    { 
+                        title: "留下并讨论", 
+                        desc: "我保持冷静并解决问题。冲突是关系中的正常部分。",
+                        scores: { secure: 3, anxious: 1, avoidant: 0, fearful: 0 }
+                    },
+                    { 
+                        title: "追求解决", 
+                        desc: "我需要立即解决。我无法忍受我们之间的紧张感。",
+                        scores: { secure: 1, anxious: 3, avoidant: 0, fearful: 1 }
+                    },
+                    { 
+                        title: "退缩", 
+                        desc: "我需要空间冷静下来。我关闭或离开对话。",
+                        scores: { secure: 0, anxious: 0, avoidant: 3, fearful: 1 }
+                    },
+                    { 
+                        title: "情绪波动", 
+                        desc: "我的情绪起伏——有时我激烈追求，有时我退缩。",
+                        scores: { secure: 0, anxious: 2, avoidant: 1, fearful: 3 }
+                    }
+                ]
+            },
+            {
+                icon: '🏠',
+                title: "你的伴侣建议同居。",
+                desc: "你对迈出这一步有什么感受？",
+                options: [
+                    { 
+                        title: "兴奋并准备", 
+                        desc: "如果时机合适，我很兴奋能加深我们的承诺。",
+                        scores: { secure: 3, anxious: 2, avoidant: 0, fearful: 0 }
+                    },
+                    { 
+                        title: "终于等到了！", 
+                        desc: "是的！这就是我一直在等的——他们承诺的证明。",
+                        scores: { secure: 1, anxious: 3, avoidant: 0, fearful: 0 }
+                    },
+                    { 
+                        title: "犹豫", 
+                        desc: "我担心失去独立性和个人空间。",
+                        scores: { secure: 1, anxious: 0, avoidant: 3, fearful: 2 }
+                    },
+                    { 
+                        title: "恐惧", 
+                        desc: "我想要亲密，但被困住的想法让我深感恐惧。",
+                        scores: { secure: 0, anxious: 1, avoidant: 2, fearful: 3 }
+                    }
+                ]
+            },
+            {
+                icon: '👥',
+                title: "你的伴侣有一个你没见过的密友。",
+                desc: "他们经常与这个朋友相处。",
+                options: [
+                    { 
+                        title: "舒适", 
+                        desc: "我很高兴他们有亲密的友谊。拥有独立的社交生活是健康的。",
+                        scores: { secure: 3, anxious: 0, avoidant: 2, fearful: 0 }
+                    },
+                    { 
+                        title: "嫉妒并好奇", 
+                        desc: "我感到被排除在外，想了解这个朋友的一切。",
+                        scores: { secure: 0, anxious: 3, avoidant: 0, fearful: 2 }
+                    },
+                    { 
+                        title: "漠不关心", 
+                        desc: "我不太在意。他们的友谊是他们的事。",
+                        scores: { secure: 1, anxious: 0, avoidant: 3, fearful: 1 }
+                    },
+                    { 
+                        title: "怀疑", 
+                        desc: "我一部分感到受威胁，但不想通过询问显得有需求。",
+                        scores: { secure: 0, anxious: 2, avoidant: 1, fearful: 3 }
+                    }
+                ]
+            },
+            {
+                icon: '🎉',
+                title: "你的伴侣在没有你的情况下取得了重大成就。",
+                desc: "他们独立达成了一个重要目标。",
+                options: [
+                    { 
+                        title: "真心高兴", 
+                        desc: "我为他们感到骄傲！我想一起庆祝他们的成功。",
+                        scores: { secure: 3, anxious: 1, avoidant: 1, fearful: 0 }
+                    },
+                    { 
+                        title: "感到被排除", 
+                        desc: "我感到被排除在外，想知道为什么我没有参与这个成就。",
+                        scores: { secure: 0, anxious: 3, avoidant: 0, fearful: 2 }
+                    },
+                    { 
+                        title: "支持但疏远", 
+                        desc: "我祝贺他们，但觉得不需要过度参与。",
+                        scores: { secure: 2, anxious: 0, avoidant: 3, fearful: 0 }
+                    },
+                    { 
+                        title: "感到受威胁", 
+                        desc: "我担心他们的成功会改变我们的关系动态，或者他们会更少需要我。",
+                        scores: { secure: 0, anxious: 2, avoidant: 1, fearful: 3 }
+                    }
+                ]
+            },
+            {
+                icon: '💭',
+                title: "当你回想过去的关系时...",
+                desc: "你通常如何反思以前的伴侣？",
+                options: [
+                    { 
+                        title: "学习经历", 
+                        desc: "我看到好的和坏的方面。每段关系都教会了我宝贵的东西。",
+                        scores: { secure: 3, anxious: 1, avoidant: 1, fearful: 0 }
+                    },
+                    { 
+                        title: "自我责备", 
+                        desc: "我经常想知道我做错了什么，以及我如何能让关系成功。",
+                        scores: { secure: 0, anxious: 3, avoidant: 0, fearful: 2 }
+                    },
+                    { 
+                        title: "不屑一顾", 
+                        desc: "我不太想他们。他们对我来说并不重要。",
+                        scores: { secure: 0, anxious: 0, avoidant: 3, fearful: 1 }
+                    },
+                    { 
+                        title: "复杂感受", 
+                        desc: "我在理想化他们和觉得他们不适合我之间摇摆。",
+                        scores: { secure: 0, anxious: 1, avoidant: 1, fearful: 3 }
+                    }
+                ]
+            },
+            {
+                icon: '📱',
+                title: "你更喜欢与伴侣沟通的频率？",
+                desc: "想想你理想的日常联系程度。",
+                options: [
+                    { 
+                        title: "平衡", 
+                        desc: "定期联系感觉很好，但我也重视没有联系的独处时间。",
+                        scores: { secure: 3, anxious: 1, avoidant: 1, fearful: 0 }
+                    },
+                    { 
+                        title: "频繁", 
+                        desc: "我喜欢整天保持联系。这让我感到连接。",
+                        scores: { secure: 1, anxious: 3, avoidant: 0, fearful: 1 }
+                    },
+                    { 
+                        title: "最少", 
+                        desc: "我更喜欢较少的联系。过多的沟通让人感到窒息。",
+                        scores: { secure: 1, anxious: 0, avoidant: 3, fearful: 1 }
+                    },
+                    { 
+                        title: "不一致", 
+                        desc: "有时我想要持续联系，有时我需要完全的空间。",
+                        scores: { secure: 0, anxious: 2, avoidant: 1, fearful: 3 }
+                    }
+                ]
+            },
+            {
+                icon: '💝',
+                title: "你的伴侣计划了一个浪漫惊喜。",
+                desc: "他们为你精心安排了特别的事情。",
+                options: [
+                    { 
+                        title: "感动并感激", 
+                        desc: "我感到被爱和被欣赏。我喜欢其中的用心。",
+                        scores: { secure: 3, anxious: 2, avoidant: 0, fearful: 0 }
+                    },
+                    { 
+                        title: "欣喜若狂", 
+                        desc: "这对我意义重大！这证明他们真的关心我。",
+                        scores: { secure: 1, anxious: 3, avoidant: 0, fearful: 1 }
+                    },
+                    { 
+                        title: "感到不适", 
+                        desc: "我欣赏这份努力，但这种程度的关注让我感到尴尬。",
+                        scores: { secure: 1, anxious: 0, avoidant: 3, fearful: 2 }
+                    },
+                    { 
+                        title: "怀疑并满意", 
+                        desc: "我很高兴，但也想知道是什么促使了这个举动。一切都好吗？",
+                        scores: { secure: 0, anxious: 2, avoidant: 1, fearful: 3 }
+                    }
+                ]
+            },
+            {
+                icon: '🔮',
+                title: "当你想象你们关系的未来时...",
+                desc: "你对长期承诺有什么感受？",
+                options: [
+                    { 
+                        title: "乐观", 
+                        desc: "我对共同建设未来感到自信和兴奋。",
+                        scores: { secure: 3, anxious: 1, avoidant: 0, fearful: 0 }
+                    },
+                    { 
+                        title: "渴望确定性", 
+                        desc: "我需要持续的保证，确保我们有一个稳固的未来。",
+                        scores: { secure: 0, anxious: 3, avoidant: 0, fearful: 2 }
+                    },
+                    { 
+                        title: "不想考虑", 
+                        desc: "我专注于当下。想得太远让人感到束缚。",
+                        scores: { secure: 1, anxious: 0, avoidant: 3, fearful: 1 }
+                    },
+                    { 
+                        title: "内心极度矛盾", 
+                        desc: "我想要承诺，但这个想法也让我恐惧。我感到被困住了。",
+                        scores: { secure: 0, anxious: 1, avoidant: 2, fearful: 3 }
+                    }
+                ]
+            }
+        ];
+
+        // Detailed attachment information
+        const attachmentDetails = {
+            secure: {
+                badge: 'badge-healthy',
+                badgeText: "健康",
+                name: "安全型依恋",
+                desc: "你已经发展出安全型依恋风格，其特征是对亲密关系和独立性都感到舒适。你信任伴侣，有效沟通，并以情感成熟的方式处理冲突。这种健康的模式让你能够保持稳定、温暖的关系，同时保持自我意识。",
+                characteristics: [
+                    { icon: "💚", text: "对亲密关系和亲密感感到舒适" },
+                    { icon: "🌟", text: "高自尊和积极看待他人" },
+                    { icon: "🗣️", text: "在冲突中有效沟通" },
+                    { icon: "🤝", text: "独立需求和相处需求的平衡" },
+                    { icon: "😌", text: "对关系和伴侣的信任" }
+                ],
+                tips: [
+                    {
+                        title: "保持你的基础",
+                        desc: "继续练习开放沟通和情感诚实。你的安全基础对你和伴侣都有益。"
+                    },
+                    {
+                        title: "支持他人",
+                        desc: "利用你的情感稳定性帮助不同依恋风格的伴侣在关系中感到更安全。"
+                    },
+                    {
+                        title: "保持自我意识",
+                        desc: "即使是安全型个体在压力下也可能陷入不安全模式。定期自我反思让你保持稳定。"
+                    }
+                ]
+            },
+            anxious: {
+                badge: 'badge-anxious',
+                badgeText: "寻求安慰",
+                name: "焦虑-矛盾型",
+                desc: "你体验到焦虑-矛盾型依恋风格，其特征是对亲密关系的强烈渴望与对关系的担忧相结合。你可能寻求频繁的确认，在伴侣不在身边时感到不安。这种模式通常源于早期关系中不一致的照顾，但意识是治愈的第一步。",
+                characteristics: [
+                    { icon: "💭", text: "频繁担心伴侣的感受和承诺" },
+                    { icon: "🔍", text: "对关系线索和变化的高度敏感性" },
+                    { icon: "💬", text: "需要频繁沟通和确认" },
+                    { icon: "😰", text: "害怕被抛弃或拒绝" },
+                    { icon: "❤️", text: "对亲密关系和亲密感的强烈渴望" }
+                ],
+                tips: [
+                    {
+                        title: "培养自我安抚技能",
+                        desc: "发展冥想、写日记或呼吸练习等技能来管理焦虑，而不是寻求即时的外部确认。"
+                    },
+                    {
+                        title: "挑战焦虑想法",
+                        desc: "当担忧出现时，问自己：'这个想法是基于事实还是恐惧？'学会区分两者可以减少不必要的痛苦。"
+                    },
+                    {
+                        title: "清晰表达需求",
+                        desc: "直接表达你的需求，而不是希望伴侣猜测。清晰的沟通减少误解并建立信任。"
+                    },
+                    {
+                        title: "发展独立性",
+                        desc: "投资于爱好、友谊和个人目标。关系之外的充实生活减少焦虑并增加信心。"
+                    }
+                ]
+            },
+            avoidant: {
+                badge: 'badge-avoidant',
+                badgeText: "独立",
+                name: "回避-疏离型",
+                desc: "你表现出回避-疏离型依恋风格，以对独立和自立的强烈偏好为标志。虽然你重视关系，但情感亲密可能让人感到不适或窒息。当事情变得过于亲密时，你可能会退缩。这种模式通常作为一种保护机制发展，但通过意识可以获得更深的情感连接。",
+                characteristics: [
+                    { icon: "🛡️", text: "强调独立和自给自足" },
+                    { icon: "😐", text: "对深层次情感亲密的不适感" },
+                    { icon: "🚶", text: "当关系变得激烈时退缩的倾向" },
+                    { icon: "🤐", text: "表达情感或需求的困难" },
+                    { icon: "💭", text: "将情感距离作为保护的偏好" }
+                ],
+                tips: [
+                    {
+                        title: "练习脆弱性",
+                        desc: "从小事开始，与信任的人分享感受。脆弱性建立更深的连接，不会削弱你的力量。"
+                    },
+                    {
+                        title: "识别退缩模式",
+                        desc: "注意你何时退缩并问自己你在感受什么。理解触发因素帮助你回应而不是自动反应。"
+                    },
+                    {
+                        title: "挑战独立信念",
+                        desc: "需要他人不是弱点——这是人性。审视将亲密等同于失去自主权的信念。"
+                    },
+                    {
+                        title: "设定健康边界",
+                        desc: "你可以在与他人亲密的同时保持独立。清晰地沟通你对空间的需求，而不是制造距离。"
+                    }
+                ]
+            },
+            fearful: {
+                badge: 'badge-fearful',
+                badgeText: "复杂",
+                name: "恐惧-回避型",
+                desc: "你体验到恐惧-回避型（混乱型）依恋风格，其特征是对亲密和距离都有矛盾的渴望。你可能渴望亲密同时又害怕亲密，导致关系中的推拉动态。这种复杂的模式通常源于过去的关系创伤，但治愈和安全依恋是可以实现的。",
+                characteristics: [
+                    { icon: "〰️", text: "对亲密关系同时渴望和恐惧" },
+                    { icon: "🔄", text: "在寻求亲密和推开之间摇摆" },
+                    { icon: "😟", text: "对被抛弃和被吞没的高度焦虑" },
+                    { icon: "💔", text: "信任他人和自己的困难" },
+                    { icon: "😕", text: "关系中的混合或混乱信号" }
+                ],
+                tips: [
+                    {
+                        title: "寻求专业支持",
+                        desc: "与接受过依恋训练的治疗师合作可以帮助你处理过去的经验并发展更健康的关系模式。"
+                    },
+                    {
+                        title: "识别你的模式",
+                        desc: "注意你何时推开某人或拉近他们。对这些循环的意识对改变至关重要。"
+                    },
+                    {
+                        title: "练习自我同情",
+                        desc: "你的依恋风格是作为一种保护而发展的。在你努力实现安全依恋时，要对自己温柔。"
+                    },
+                    {
+                        title: "沟通内在冲突",
+                        desc: "与信任的伴侣分享你的复杂感受。对你的挣扎保持诚实可以减少困惑并建立理解。"
+                    }
+                ]
+            }
+        };
+
+        // State management
+        let currentQuestion = 0;
+        let answers = [];
+        let scores = { secure: 0, anxious: 0, avoidant: 0, fearful: 0 };
+        let testStartTime = null;
+
+        // 计算最大可能分数（用于百分比计算）
+        const maxPossibleScore = questions.length * 3; // 每题最高3分
+
+        // Utility functions
+        function showScreen(screenId) {
+            const screens = ['welcomeScreen', 'reflectionScreen', 'attachmentOverview', 'testScreen', 'resultScreen'];
+            screens.forEach(id => {
+                document.getElementById(id).style.display = 'none';
+            });
+            document.getElementById(screenId).style.display = 'block';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function showLoading(show = true) {
+            document.getElementById('loadingOverlay').style.display = show ? 'flex' : 'none';
+        }
+
+        function showToast(message, icon = '✓', duration = 3000) {
+            const toast = document.getElementById('toast');
+            const toastMessage = document.getElementById('toastMessage');
+            const toastIcon = document.getElementById('toastIcon');
+            
+            toastMessage.textContent = message;
+            toastIcon.textContent = icon;
+            toast.classList.add('show');
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, duration);
+        }
+
+        function createConfetti() {
+            const colors = ['#ff6b9d', '#c44569', '#ffa502', '#ff6348', '#5f27cd', '#00d2d3'];
+            const confettiCount = 50;
+            
+            for (let i = 0; i < confettiCount; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.left = Math.random() * window.innerWidth + 'px';
+                confetti.style.top = '-10px';
+                confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.animationDelay = Math.random() * 2 + 's';
+                confetti.style.animationDuration = (Math.random() * 2 + 2) + 's';
+                document.body.appendChild(confetti);
+                
+                setTimeout(() => confetti.remove(), 5000);
+            }
+        }
+
+        function updateProgressDots() {
+            const container = document.getElementById('questionProgress');
+            container.innerHTML = '';
+            
+            // 只显示前10个点（避免太多）
+            const dotsToShow = Math.min(questions.length, 10);
+            const interval = Math.floor(questions.length / dotsToShow);
+            
+            for (let i = 0; i < dotsToShow; i++) {
+                const dot = document.createElement('div');
+                dot.className = 'progress-dot';
+                
+                const questionIndex = i * interval;
+                if (questionIndex < currentQuestion) {
+                    dot.classList.add('completed');
+                } else if (questionIndex === currentQuestion) {
+                    dot.classList.add('current');
+                }
+                
+                container.appendChild(dot);
+            }
+        }
+
+        function showModal(title, desc, onConfirm) {
+            document.getElementById('modalTitle').textContent = title;
+            document.getElementById('modalDesc').textContent = desc;
+            document.getElementById('modal').style.display = 'flex';
+            
+            const confirmBtn = document.getElementById('modalConfirm');
+            confirmBtn.onclick = () => {
+                closeModal();
+                onConfirm();
+            };
+        }
+
+        function closeModal() {
+            document.getElementById('modal').style.display = 'none';
+        }
+
+        // Navigation functions
+        function startJourney() {
+            startTest();
+        }
+
+        function startTest() {
+            currentQuestion = 0;
+            answers = [];
+            scores = { secure: 0, anxious: 0, avoidant: 0, fearful: 0 };
+            testStartTime = Date.now();
+            
+            showScreen('testScreen');
+            document.getElementById('totalQ').textContent = questions.length;
+            showQuestion();
+            
+            // Save progress
+            saveProgress();
+        }
+
+        function showAttachmentOverview() {
+            showScreen('attachmentOverview');
+        }
+
+        function backToWelcome() {
+            showScreen('welcomeScreen');
+        }
+
+        function showSettings() {
+            showModal(
+                '设置',
+                '自定义你的体验并管理你的数据。功能即将推出！',
+                () => {}
+            );
+        }
+
+        // Question management
+        function showQuestion() {
+            const q = questions[currentQuestion];
+            const questionCard = document.querySelector('.question-card');
+            
+            // Add swipe animation
+            if (questionCard) {
+                questionCard.classList.remove('swipe-in');
+                questionCard.classList.add('swipe-out');
+                
+                setTimeout(() => {
+                    updateQuestionContent();
+                    questionCard.classList.remove('swipe-out');
+                    questionCard.classList.add('swipe-in');
+                }, 150);
+            } else {
+                updateQuestionContent();
+            }
+            
+            function updateQuestionContent() {
+                document.getElementById('currentQ').textContent = currentQuestion + 1;
+                document.getElementById('questionIcon').textContent = q.icon;
+                document.getElementById('questionTitle').textContent = q.title;
+                document.getElementById('questionDesc').textContent = q.desc;
+                
+                const optionsContainer = document.getElementById('optionsContainer');
+                optionsContainer.innerHTML = '';
+                
+                q.options.forEach((option, index) => {
+                    const optionDiv = document.createElement('div');
+                    optionDiv.className = 'option';
+                    optionDiv.innerHTML = `
+                        <div class="option-title">
+                            <span class="option-radio"></span>
+                            ${option.title}
+                        </div>
+                        <div class="option-desc">${option.desc}</div>
+                    `;
+                    optionDiv.onclick = () => selectOption(index);
+                    optionsContainer.appendChild(optionDiv);
+                });
+
+                // Update progress
+                const progress = ((currentQuestion + 1) / questions.length) * 100;
+                document.getElementById('progressFill').style.width = progress + '%';
+                
+                // Update progress dots
+                updateProgressDots();
+
+                // Restore previous answer if exists
+                if (answers[currentQuestion] !== undefined) {
+                    const options = document.querySelectorAll('.option');
+                    options[answers[currentQuestion]].classList.add('selected');
+                    document.getElementById('nextBtn').disabled = false;
+                } else {
+                    document.getElementById('nextBtn').disabled = true;
+                }
+            }
+        }
+
+        function selectOption(index) {
+            const options = document.querySelectorAll('.option');
+            options.forEach(opt => opt.classList.remove('selected'));
+            options[index].classList.add('selected');
+            
+            answers[currentQuestion] = index;
+            document.getElementById('nextBtn').disabled = false;
+            
+            // Haptic feedback (if supported)
+            if (navigator.vibrate) {
+                navigator.vibrate(10);
+            }
+            
+            // Save progress (debounced)
+            clearTimeout(window.saveTimeout);
+            window.saveTimeout = setTimeout(() => {
+                saveProgress();
+            }, 500);
+        }
+
+        function nextQuestion() {
+            // 获取用户选择的选项
+            const selectedOption = questions[currentQuestion].options[answers[currentQuestion]];
+            
+            // 将该选项的所有分数累加到对应的依恋类型
+            scores.secure += selectedOption.scores.secure;
+            scores.anxious += selectedOption.scores.anxious;
+            scores.avoidant += selectedOption.scores.avoidant;
+            scores.fearful += selectedOption.scores.fearful;
+
+            if (currentQuestion < questions.length - 1) {
+                currentQuestion++;
+                showQuestion();
+            } else {
+                finishTest();
+            }
+        }
+
+        function previousQuestion() {
+            if (currentQuestion > 0) {
+                currentQuestion--;
+                showQuestion();
+            }
+        }
+
+        function finishTest() {
+            // 显示加载页面
+            showScreen('reflectionScreen');
+            
+            // 清除保存的进度
+            clearProgress();
+            
+            // 2.5秒后显示结果
+            setTimeout(() => {
+                createConfetti();
+                showResults();
+            }, 2500);
+        }
+
+        // Results
+        function showResults() {
+            // 计算每种依恋类型的百分比分数
+            const percentages = {
+                secure: (scores.secure / maxPossibleScore * 100).toFixed(1),
+                anxious: (scores.anxious / maxPossibleScore * 100).toFixed(1),
+                avoidant: (scores.avoidant / maxPossibleScore * 100).toFixed(1),
+                fearful: (scores.fearful / maxPossibleScore * 100).toFixed(1)
+            };
+
+            // 确定主导依恋风格（得分最高的）
+            let maxPercentage = 0;
+            let dominantStyle = '';
+            
+            for (let style in percentages) {
+                if (parseFloat(percentages[style]) > maxPercentage) {
+                    maxPercentage = parseFloat(percentages[style]);
+                    dominantStyle = style;
+                }
+            }
+
+            const detail = attachmentDetails[dominantStyle];
+            const dominantPercentage = percentages[dominantStyle];
+            
+            // Build characteristics HTML
+            let characteristicsHTML = `
+                <div class="characteristics">
+                    <div class="characteristics-title">
+                        <span>✨</span>
+                        Key Characteristics
+                    </div>
+            `;
+            detail.characteristics.forEach(char => {
+                characteristicsHTML += `
+                    <div class="characteristic-item">
+                        <div class="characteristic-icon">${char.icon}</div>
+                        <div class="characteristic-text">${char.text}</div>
+                    </div>
+                `;
+            });
+            characteristicsHTML += '</div>';
+
+            // Build insights HTML - 使用新的百分比数据
+            let insightsHTML = '<div class="insights-section">';
+            const insights = generateInsights(dominantStyle, percentages, scores);
+            insights.forEach(insight => {
+                insightsHTML += `
+                    <div class="insight-card">
+                        <div class="insight-header">
+                            <div class="insight-icon">${insight.icon}</div>
+                            <div class="insight-title">${insight.title}</div>
+                        </div>
+                        <div class="insight-text">${insight.text}</div>
+                    </div>
+                `;
+            });
+            insightsHTML += '</div>';
+
+            // Build growth tips HTML
+            let tipsHTML = `
+                <div class="growth-tips">
+                    <div class="growth-tips-title">
+                        <span>🌱</span>
+                        Growth Path
+                    </div>
+            `;
+            detail.tips.forEach(tip => {
+                tipsHTML += `
+                    <div class="growth-tip-item">
+                        <div class="growth-tip-title">${tip.title}</div>
+                        <div class="growth-tip-desc">${tip.desc}</div>
+                    </div>
+                `;
+            });
+            tipsHTML += '</div>';
+
+            // Build score distribution HTML - 使用百分比
+            let scoreHTML = `
+                <div class="score-distribution">
+                    <div class="score-title">Your Attachment Profile</div>
+            `;
+            
+            const styleNames = {
+                secure: 'Secure',
+                anxious: 'Anxious',
+                avoidant: 'Avoidant',
+                fearful: 'Fearful'
+            };
+            
+            for (let style in percentages) {
+                const percentage = Math.round(percentages[style]);
+                scoreHTML += `
+                    <div class="score-item">
+                        <div class="score-label">
+                            <span class="score-name">${styleNames[style]}</span>
+                            <span class="score-value">${percentage}%</span>
+                        </div>
+                        <div class="score-bar-bg">
+                            <div class="score-bar-fill ${style}" data-width="${percentage}"></div>
+                        </div>
+                    </div>
+                `;
+            }
+            scoreHTML += '</div>';
+
+            // Build stats HTML
+            const testDuration = Math.round((Date.now() - testStartTime) / 1000 / 60);
+            let statsHTML = `
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">🎯</div>
+                        <div class="stat-value">${Math.round(dominantPercentage)}%</div>
+                        <div class="stat-label">Match</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">⏱️</div>
+                        <div class="stat-value">${testDuration}</div>
+                        <div class="stat-label">Minutes</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">📊</div>
+                        <div class="stat-value">${questions.length}</div>
+                        <div class="stat-label">Questions</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">✅</div>
+                        <div class="stat-value">100%</div>
+                        <div class="stat-label">Complete</div>
+                    </div>
+                </div>
+            `;
+
+            // Build resources HTML
+            let resourcesHTML = `
+                <div class="resources-section">
+                    <div class="resources-title">
+                        <span>📚</span>
+                        Recommended Resources
+                    </div>
+                    <div class="resource-item" onclick="showToast('正在打开书籍推荐...', '📖')">
+                        <div class="resource-name">Amir Levine著《依恋》</div>
+                        <div class="resource-desc">关系中依恋理论的必读内容</div>
+                    </div>
+                    <div class="resource-item" onclick="showToast('正在打开播客...', '🎧')">
+                        <div class="resource-name">依恋理论播客</div>
+                        <div class="resource-desc">培养安全依恋的每周洞察</div>
+                    </div>
+                    <div class="resource-item" onclick="showToast('正在打开治疗师查找...', '💬')">
+                        <div class="resource-name">寻找治疗师</div>
+                        <div class="resource-desc">与专注依恋的专业人士联系</div>
+                    </div>
+                </div>
+            `;
+            
+            showScreen('resultScreen');
+            
+            document.getElementById('resultContent').innerHTML = `
+                <div class="attachment-card">
+                    <div class="attachment-badge ${detail.badge}">${detail.badgeText}</div>
+                    <h2 class="attachment-name">${detail.name}</h2>
+                    <p class="attachment-desc">${detail.desc}</p>
+                    ${characteristicsHTML}
+                    ${insightsHTML}
+                    ${tipsHTML}
+                </div>
+                ${statsHTML}
+                ${scoreHTML}
+                ${resourcesHTML}
+            `;
+
+            // Animate score bars
+            setTimeout(() => {
+                document.querySelectorAll('.score-bar-fill').forEach(bar => {
+                    bar.style.width = bar.dataset.width + '%';
+                });
+            }, 100);
+
+            // Save results - 保存百分比而不是原始分数
+            saveResults(dominantStyle, percentages);
+        }
+
+        function generateInsights(dominantStyle, percentages, rawScores) {
+            const insights = [];
+            const dominantPercentage = parseFloat(percentages[dominantStyle]);
+            
+            // Insight 1: 主导风格强度分析
+            if (dominantPercentage >= 60) {
+                insights.push({
+                    icon: '🎯',
+                    title: "清晰模式",
+                    text: `你的${dominantStyle}依恋模式非常明显（${Math.round(dominantPercentage)}%）。这种强烈倾向为你提供了个人成长和自我理解的明确方向。`
+                });
+            } else if (dominantPercentage >= 40) {
+                insights.push({
+                    icon: '🌈',
+                    title: "中等倾向",
+                    text: `你表现出中等程度的${dominantStyle}模式（${Math.round(dominantPercentage)}%），受到其他风格的有意义影响。这种灵活性在不同关系环境中可能是一种优势。`
+                });
+            } else {
+                insights.push({
+                    icon: '🔄',
+                    title: "混合档案",
+                    text: `你的依恋风格在多种模式中相当混合。这表明你可能会根据特定关系或情况调整你的依恋行为。`
+                });
+            }
+            
+            // Insight 2: 安全型基础分析
+            const securePercentage = parseFloat(percentages.secure);
+            if (securePercentage >= 35) {
+                insights.push({
+                    icon: '💪',
+                    title: "安全基础",
+                    text: `你有${Math.round(securePercentage)}%的安全依恋特质。这种健康基础提供了韧性，可以帮助你随着时间发展出更安全的模式。`
+                });
+            } else if (securePercentage >= 20) {
+                insights.push({
+                    icon: '🌱',
+                    title: "成长中的安全感",
+                    text: `你${Math.round(securePercentage)}%的安全依恋分数显示了成长潜力。通过意识和练习，你可以加强这些健康模式。`
+                });
+            }
+            
+            // Insight 3: 混合模式分析
+            const secondHighest = Object.entries(percentages)
+                .filter(([style]) => style !== dominantStyle)
+                .sort(([, a], [, b]) => parseFloat(b) - parseFloat(a))[0];
+            
+            if (secondHighest && parseFloat(secondHighest[1]) >= 30) {
+                const styleNames = {
+                    secure: "安全型",
+                    anxious: "焦虑型",
+                    avoidant: "回避型",
+                    fearful: "恐惧-回避型"
+                };
+                insights.push({
+                    icon: '🔍',
+                    title: "次要模式",
+                    text: `你还表现出显著的${styleNames[secondHighest[0]]}倾向（${Math.round(secondHighest[1])}%）。不同情况可能激活你依恋风格的不同方面。`
+                });
+            }
+            
+            // Insight 4: 自我认知的重要性
+            if (insights.length < 3) {
+                insights.push({
+                    icon: '🧠',
+                    title: "意识的力量",
+                    text: "理解你的依恋模式是变革性的。研究表明，仅仅识别这些倾向就能帮助你在关系中做出更明智的选择。"
+                });
+            }
+            
+            return insights.slice(0, 3); // 最多返回3个洞察
+        }
+
+        function shareResult() {
+            const resultData = localStorage.getItem('attachmentTestResult');
+            if (!resultData) return;
+            
+            const result = JSON.parse(resultData);
+            const styleNames = {
+                secure: "安全型依恋",
+                anxious: "焦虑-矛盾型",
+                avoidant: "回避-疏离型",
+                fearful: "恐惧-回避型"
+            };
+            
+            const shareText = `I discovered my attachment style: ${styleNames[result.style]}! 🌱\n\nTake the PsycheFit test and learn about yourself.`;
+            
+            if (navigator.share) {
+                navigator.share({
+                    title: '我的依恋风格 - PsycheFit',
+                    text: shareText,
+                    url: window.location.href
+                }).then(() => {
+                    showToast('感谢分享！💚', '✓');
+                }).catch(() => {});
+            } else {
+                // Fallback: copy to clipboard
+                navigator.clipboard.writeText(shareText + '\n' + window.location.href).then(() => {
+                    showToast('链接已复制到剪贴板！', '📋');
+                }).catch(() => {
+                    showToast('无法分享', '❌');
+                });
+            }
+        }
+
+        function restartTest() {
+            showModal(
+                '重新开始？🔄',
+                '你当前的结果将保存在历史记录中。准备好再次探索你的依恋风格了吗？',
+                () => {
+                    clearProgress();
+                    showToast('开始新的旅程...', '🌱');
+                    setTimeout(() => {
+                        showScreen('welcomeScreen');
+                    }, 500);
+                }
+            );
+        }
+
+        function showStyleDetail(style) {
+            const detail = attachmentDetails[style];
+            showModal(
+                detail.name,
+                detail.desc,
+                () => {}
+            );
+        }
+
+        // Local storage functions
+        function saveProgress() {
+            const progress = {
+                currentQuestion,
+                answers,
+                scores,
+                timestamp: Date.now()
+            };
+            localStorage.setItem('attachmentTestProgress', JSON.stringify(progress));
+        }
+
+        function loadProgress() {
+            const saved = localStorage.getItem('attachmentTestProgress');
+            if (saved) {
+                const progress = JSON.parse(saved);
+                // Only load if less than 24 hours old
+                if (Date.now() - progress.timestamp < 24 * 60 * 60 * 1000) {
+                    return progress;
+                }
+            }
+            return null;
+        }
+
+        function clearProgress() {
+            localStorage.removeItem('attachmentTestProgress');
+        }
+
+        function saveResults(style, percentages) {
+            const result = {
+                style,
+                scores,
+                percentages,
+                date: new Date().toISOString(),
+                duration: Date.now() - testStartTime
+            };
+            
+            // Save current result
+            localStorage.setItem('attachmentTestResult', JSON.stringify(result));
+            
+            // Save to history
+            let history = JSON.parse(localStorage.getItem('attachmentTestHistory') || '[]');
+            history.push(result);
+            // Keep only last 10 results
+            if (history.length > 10) history = history.slice(-10);
+            localStorage.setItem('attachmentTestHistory', JSON.stringify(history));
+        }
+
+        // Header scroll effect
+        let lastScrollY = 0;
+        window.addEventListener('scroll', () => {
+            const header = document.getElementById('header');
+            if (window.scrollY > 10) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+            lastScrollY = window.scrollY;
+        });
+
+        // Initialize on load
+        document.addEventListener('DOMContentLoaded', () => {
+            // Check for saved progress
+            const saved = loadProgress();
+            if (saved && saved.currentQuestion > 0) {
+                showModal(
+                    '欢迎回来！👋',
+                    `你在第${saved.currentQuestion + 1}题。你想从上次离开的地方继续吗？`,
+                    () => {
+                        currentQuestion = saved.currentQuestion;
+                        answers = saved.answers;
+                        scores = saved.scores;
+                        testStartTime = saved.timestamp;
+                        showScreen('testScreen');
+                        showQuestion();
+                        showToast('进度已恢复', '✓');
+                    }
+                );
+            }
+
+            // Add keyboard navigation
+            document.addEventListener('keydown', (e) => {
+                const testScreen = document.getElementById('testScreen');
+                if (testScreen.style.display !== 'block') return;
+
+                if (e.key === 'ArrowLeft' && currentQuestion > 0) {
+                    previousQuestion();
+                } else if (e.key === 'ArrowRight' && !document.getElementById('nextBtn').disabled) {
+                    nextQuestion();
+                } else if (e.key >= '1' && e.key <= '4') {
+                    const index = parseInt(e.key) - 1;
+                    const options = document.querySelectorAll('.option');
+                    if (options[index]) {
+                        options[index].click();
+                    }
+                } else if (e.key === 'Enter' && !document.getElementById('nextBtn').disabled) {
+                    nextQuestion();
+                }
+            });
+
+            // Prevent accidental page reload during test
+            window.addEventListener('beforeunload', (e) => {
+                const testScreen = document.getElementById('testScreen');
+                if (testScreen.style.display === 'block' && currentQuestion > 0 && currentQuestion < questions.length - 1) {
+                    e.preventDefault();
+                    e.returnValue = '你的测试进度将被保存，但你确定要离开吗？';
+                }
+            });
+
+            // Add smooth scroll behavior
+            document.documentElement.style.scrollBehavior = 'smooth';
+
+            // Enhanced touch feedback
+            const addTouchFeedback = (selector) => {
+                document.querySelectorAll(selector).forEach(el => {
+                    el.addEventListener('touchstart', function() {
+                        this.style.transform = 'scale(0.98)';
+                        this.style.opacity = '0.9';
+                    });
+                    el.addEventListener('touchend', function() {
+                        this.style.transform = '';
+                        this.style.opacity = '';
+                    });
+                });
+            };
+
+            // Apply to interactive elements
+            setTimeout(() => {
+                addTouchFeedback('button');
+                addTouchFeedback('.option');
+                addTouchFeedback('.style-card');
+                addTouchFeedback('.resource-item');
+            }, 100);
+
+            // Auto-save interval (every 30 seconds during test)
+            setInterval(() => {
+                const testScreen = document.getElementById('testScreen');
+                if (testScreen.style.display === 'block' && answers.length > 0) {
+                    saveProgress();
+                }
+            }, 30000);
+
+            // Check if user has previous results
+            const previousResult = localStorage.getItem('attachmentTestResult');
+            if (previousResult && !saved) {
+                // Add a subtle indicator that they've taken the test before
+                console.log('Previous results found');
+            }
+
+            // Performance optimization: lazy load animations
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '50px'
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, observerOptions);
+
+            // Show welcome message
+            setTimeout(() => {
+                if (!saved && !previousResult) {
+                    showToast('欢迎来到PsycheFit！🌱', '👋', 4000);
+                }
+            }, 1000);
+        });
+    </script>
+</body>
+</html>
