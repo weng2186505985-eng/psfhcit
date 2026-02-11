@@ -7,10 +7,6 @@
     <title>PsycheFit - 依恋风格测试</title>
     
     <link rel="stylesheet" href="css/style.css">
-    <body>
-    <script src="js/data.js"></script>
-    <script src="js/script.js"></script>
-</body>
 </head>
 <body>
     <div class="bg-circle bg-circle-1"></div>
@@ -106,6 +102,7 @@
         <div class="result-screen" id="resultScreen">
             <div id="resultContent"></div>
             <div class="action-buttons">
+                <button class="premium-button" onclick="showPremiumOffer()">📦 获取行动包（小红书发货）</button>
                 <button class="share-button" onclick="shareResult()">📊 分享结果</button>
                 <button class="restart-button" onclick="restartTest()">🔄 重新测试</button>
             </div>
@@ -127,6 +124,8 @@
         <span class="toast-icon" id="toastIcon">✓</span>
         <span id="toastMessage">进度已保存</span>
     </div>
-      
+
+    <script src="js/data.js"></script>
+    <script src="js/script.js"></script>
 </body>
 </html>
