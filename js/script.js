@@ -308,6 +308,7 @@ function showResults(results) {
             <div class="result-hero-icon">🌸</div>
             <div class="result-hero-content">
                 <div class="result-hero-subtitle">你的依恋风格是</div>
+                <div class="result-offer-badge">🔥 今日限时：深度报告 7 折</div>
                 <h1 class="result-hero-title">${detail.name}</h1>
                 <div class="attachment-badge ${detail.badge}">${detail.badgeText}</div>
             </div>
@@ -407,6 +408,24 @@ function showResults(results) {
             `).join('')}
         </div>
 
+        <div class="premium-conversion-card">
+            <div class="premium-conversion-title">升级为「深度版」报告</div>
+            <div class="premium-conversion-subtitle">把“知道自己”升级为“真正能改善关系”</div>
+            <div class="premium-value-list">
+                <div class="premium-value-item">✅ 你的关系触发点与风险场景地图</div>
+                <div class="premium-value-item">✅ 适配你类型的沟通修复脚本（可直接套用）</div>
+                <div class="premium-value-item">✅ 14天微行动计划 + 每日1分钟提醒建议</div>
+            </div>
+            <div class="premium-price-row">
+                <span class="premium-price-current">¥29</span>
+                <span class="premium-price-original">¥99</span>
+                <span class="premium-price-tag">限时体验价</span>
+            </div>
+            <button class="premium-conversion-button" onclick="showPremiumOffer()">立即解锁深度报告</button>
+            <div class="premium-trust">已有 12,000+ 用户升级深度报告 · 7天无忧保障</div>
+        </div>
+
+
         <div class="today-action">
             <div class="today-action-icon">✨</div>
             <div class="today-action-title">今天就开始</div>
@@ -419,6 +438,17 @@ function showResults(results) {
 
     getEl('resultContent').innerHTML = html;
     showScreen('resultScreen');
+}
+
+
+function showPremiumOffer() {
+    showModal(
+        '解锁你的深度关系报告',
+        '限时体验价 ¥29（原价 ¥99）。立即获得：\n1) 你的依恋触发点雷达图\n2) 专属沟通修复话术\n3) 14天关系成长微计划\n\n现在购买可额外获得「伴侣沟通速查卡」。',
+        () => {
+            showToast('支付功能即将上线，已为你保留限时优惠 🎁', '💳');
+        }
+    );
 }
 
 function restartTest() {
