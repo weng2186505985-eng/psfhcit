@@ -308,7 +308,7 @@ function showResults(results) {
             <div class="result-hero-icon">🌸</div>
             <div class="result-hero-content">
                 <div class="result-hero-subtitle">你的依恋风格是</div>
-                <div class="result-offer-badge">🔥 今日限时：深度报告 7 折</div>
+                <div class="result-offer-badge">🔥 今日限时：行动包直发</div>
                 <h1 class="result-hero-title">${detail.name}</h1>
                 <div class="attachment-badge ${detail.badge}">${detail.badgeText}</div>
             </div>
@@ -409,20 +409,20 @@ function showResults(results) {
         </div>
 
         <div class="premium-conversion-card">
-            <div class="premium-conversion-title">升级为「深度版」报告</div>
-            <div class="premium-conversion-subtitle">把“知道自己”升级为“真正能改善关系”</div>
+            <div class="premium-conversion-title">升级为「关系行动包」</div>
+            <div class="premium-conversion-subtitle">不是听道理，而是拿到就能照做</div>
             <div class="premium-value-list">
-                <div class="premium-value-item">✅ 你的关系触发点与风险场景地图</div>
-                <div class="premium-value-item">✅ 适配你类型的沟通修复脚本（可直接套用）</div>
-                <div class="premium-value-item">✅ 14天微行动计划 + 每日1分钟提醒建议</div>
+                <div class="premium-value-item">✅ 冲突场景处理清单（冷战/已读不回/情绪上头）</div>
+                <div class="premium-value-item">✅ 可直接复制的沟通修复话术模板</div>
+                <div class="premium-value-item">✅ 7天关系回温行动步骤（每天1步）</div>
             </div>
             <div class="premium-price-row">
                 <span class="premium-price-current">¥29</span>
                 <span class="premium-price-original">¥99</span>
                 <span class="premium-price-tag">限时体验价</span>
             </div>
-            <button class="premium-conversion-button" onclick="showPremiumOffer()">立即解锁深度报告</button>
-            <div class="premium-trust">已有 12,000+ 用户升级深度报告 · 7天无忧保障</div>
+            <button class="premium-conversion-button" onclick="showPremiumOffer()">立即获取行动包（小红书发货）</button>
+            <div class="premium-trust">已有 12,000+ 用户领取并使用 · 下单后尽快发货</div>
         </div>
 
 
@@ -443,10 +443,10 @@ function showResults(results) {
 
 function showPremiumOffer() {
     showModal(
-        '解锁你的深度关系报告',
-        '限时体验价 ¥29（原价 ¥99）。立即获得：\n1) 你的依恋触发点雷达图\n2) 专属沟通修复话术\n3) 14天关系成长微计划\n\n现在购买可额外获得「伴侣沟通速查卡」。',
+        '领取你的关系行动包',
+        '限时价 ¥29（原价 ¥99）。下单后小红书发货，包含：\n1) 冲突场景应对清单\n2) 可复制沟通话术模板\n3) 7天关系行动步骤\n\n加赠「伴侣沟通速查卡」。',
         () => {
-            showToast('支付功能即将上线，已为你保留限时优惠 🎁', '💳');
+            showToast('已为你准备好行动包入口，请前往小红书下单 📦', '✨');
         }
     );
 }
