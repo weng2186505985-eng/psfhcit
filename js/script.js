@@ -292,6 +292,19 @@ function showResults(results) {
         console.error("未找到对应的依恋类型详情:", type);
         return;
     }
+    const typeHookMap = {
+        secure: '你的优势是稳定与信任，适合把关系带入更深层次。',
+        anxious: '你的优势是高敏感与投入，关键是把焦虑转化为表达能力。',
+        avoidant: '你的优势是边界与独立，关键是学会在安全中靠近。',
+        fearful: '你的优势是感受力深，关键是建立稳定的亲密节奏。'
+    };
+
+    const offerFitMap = {
+        secure: ['想提升沟通质量的长期关系', '希望减少重复冲突的伴侣', '想把关系从“还不错”变成“更有质量”'],
+        anxious: ['容易因等待回复而内耗', '争吵后会后悔但不知道怎么补救', '总担心被忽略，希望建立稳定感'],
+        avoidant: ['不擅长表达需求和脆弱', '冲突时容易沉默或抽离', '想亲近但害怕被控制或失去自由'],
+        fearful: ['关系中常出现“靠近-推开”循环', '情绪上来时不知道如何收住', '渴望连接但缺乏安全表达路径']
+    };
 
     // 1. 顶部英雄横幅 HTML 生成
     // 根据类型选择对应的主题色类名
@@ -311,6 +324,7 @@ function showResults(results) {
                 <div class="result-offer-badge">🔥 今日限时：行动包直发</div>
                 <h1 class="result-hero-title">${detail.name}</h1>
                 <div class="attachment-badge ${detail.badge}">${detail.badgeText}</div>
+                <p class="result-hook">${typeHookMap[type] || "你已经在改变关系的路上。"}</p>
             </div>
         </div>
     `;
@@ -408,7 +422,7 @@ function showResults(results) {
             `).join('')}
         </div>
 
-        <div class="premium-conversion-card">
+        <div class="premium-conversion-card" id="offerCard">
             <div class="premium-conversion-title">升级为「关系行动包」</div>
             <div class="premium-conversion-subtitle">不是听道理，而是拿到就能照做</div>
             <div class="premium-value-list">
@@ -422,7 +436,50 @@ function showResults(results) {
                 <span class="premium-price-tag">限时体验价</span>
             </div>
             <button class="premium-conversion-button" onclick="showPremiumOffer()">立即获取行动包（小红书发货）</button>
+            <button class="premium-secondary-button" onclick="scrollToFaq()">先看常见问题</button>
             <div class="premium-trust">已有 12,000+ 用户领取并使用 · 下单后尽快发货</div>
+        </div>
+
+
+        <div class="offer-fit-card">
+            <div class="offer-fit-title">这份行动包尤其适合你，如果你正在经历：</div>
+            <div class="offer-fit-list">
+                ${(offerFitMap[type] || []).map(item => `<div class="offer-fit-item">• ${item}</div>`).join('')}
+            </div>
+        </div>
+
+        <div class="delivery-steps-card">
+            <div class="delivery-steps-title">下单后你会怎么收到（小红书发货）</div>
+            <div class="delivery-steps-grid">
+                <div class="delivery-step"><span>1</span><p>点击按钮获取下单入口</p></div>
+                <div class="delivery-step"><span>2</span><p>小红书下单后按指引提交信息</p></div>
+                <div class="delivery-step"><span>3</span><p>尽快收到行动包并按步骤执行</p></div>
+            </div>
+        </div>
+
+        <div class="social-proof-card">
+            <div class="social-proof-title">用户反馈</div>
+            <div class="social-proof-list">
+                <div class="social-proof-item">“以前一吵架就沉默，照着模板说第一句后，沟通终于开始转起来了。”</div>
+                <div class="social-proof-item">“不是鸡汤，是真的能直接用。最有用的是冲突后的修复步骤。”</div>
+                <div class="social-proof-item">“我对象说我表达方式变温和了，关系明显没那么紧绷。”</div>
+            </div>
+        </div>
+
+        <div class="faq-card" id="faqCard">
+            <div class="faq-title">常见问题</div>
+            <details class="faq-item">
+                <summary>这是不是咨询服务？</summary>
+                <p>不是。它是一次性交付的行动包，帮助你在具体关系场景里“知道下一步做什么”。</p>
+            </details>
+            <details class="faq-item">
+                <summary>拿到后多久可以开始用？</summary>
+                <p>拿到即可使用，建议先从“高频冲突场景”开始，一次只做一个动作。</p>
+            </details>
+            <details class="faq-item">
+                <summary>不适合我怎么办？</summary>
+                <p>先执行前两步再判断，大部分用户在第一周就能感到沟通阻力下降。</p>
+            </details>
         </div>
 
 
@@ -449,6 +506,11 @@ function showPremiumOffer() {
             showToast('已为你准备好行动包入口，请前往小红书下单 📦', '✨');
         }
     );
+}
+
+function scrollToFaq() {
+    const faq = getEl('faqCard');
+    if (faq) faq.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
 function restartTest() {

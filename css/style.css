@@ -1417,3 +1417,129 @@
     font-size: 12px;
     color: #718096;
 }
+
+
+.result-hook {
+    margin-top: 10px;
+    font-size: 14px;
+    color: #4a5568;
+    line-height: 1.6;
+}
+
+.premium-secondary-button {
+    width: 100%;
+    margin-top: 10px;
+    border: 1px solid #ffd9bf;
+    border-radius: 12px;
+    padding: 12px 14px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #c05621;
+    background: #fff8f3;
+}
+
+.offer-fit-card,
+.delivery-steps-card,
+.social-proof-card,
+.faq-card {
+    background: rgba(255,255,255,0.85);
+    border: 1px solid rgba(226,232,240,0.9);
+    border-radius: 18px;
+    padding: 18px;
+    margin-bottom: 16px;
+}
+
+.offer-fit-title,
+.delivery-steps-title,
+.social-proof-title,
+.faq-title {
+    font-size: 17px;
+    font-weight: 700;
+    color: #2d3748;
+    margin-bottom: 10px;
+}
+
+.offer-fit-list {
+    display: grid;
+    gap: 8px;
+}
+
+.offer-fit-item {
+    font-size: 14px;
+    color: #4a5568;
+    line-height: 1.6;
+}
+
+.delivery-steps-grid {
+    display: grid;
+    gap: 10px;
+}
+
+.delivery-step {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    background: #f7fafc;
+    border-radius: 12px;
+    padding: 10px;
+}
+
+.delivery-step span {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: #ed8936;
+    color: white;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+.delivery-step p {
+    margin: 0;
+    font-size: 14px;
+    color: #4a5568;
+}
+
+.social-proof-list {
+    display: grid;
+    gap: 10px;
+}
+
+.social-proof-item {
+    font-size: 14px;
+    color: #4a5568;
+    line-height: 1.65;
+    background: #f7fafc;
+    border-left: 3px solid #ed8936;
+    border-radius: 10px;
+    padding: 10px 12px;
+}
+
+.faq-item {
+    background: #f7fafc;
+    border-radius: 10px;
+    padding: 10px 12px;
+    margin-bottom: 8px;
+}
+
+.faq-item:last-child {
+    margin-bottom: 0;
+}
+
+.faq-item summary {
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    color: #2d3748;
+}
+
+.faq-item p {
+    margin: 8px 0 0;
+    font-size: 13px;
+    color: #4a5568;
+    line-height: 1.65;
+}
